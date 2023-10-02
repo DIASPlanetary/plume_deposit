@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.colors as colors
+import plotly.express as pe
+import os
 
 #the following code is used to load the densityStorage.npy file
 #the path file will need to be changed if run on another device. 
@@ -69,12 +71,12 @@ def Index_Calculator(coord):
     initial_coord = -2995.
     factor = 10
     index = ((coord-initial_coord)/factor)
-    return (round(index))
+    return (index)
 
 print(f"The index of the positive radius is {Index_Calculator(radius)}")
 print(f"The index of the negative radius is {Index_Calculator(-radius)}")
-print(z[456],y[456])
-print(z[143],y[143])
+#print(z[456],y[456])
+#print(z[143],y[143])
 #initialising empty lists
 #these are to store the z and y coordinates of the surface cells for each quadrant of the circle
 zc = []
@@ -129,13 +131,57 @@ third_yq = np.append(third_yq,last_yq)
 second_yq = np.append(second_yq,third_yq)
 yc = np.append(yc,second_yq)
 
+
+#yi = (Index_Calculator(yc))
+#zi = (Index_Calculator(zc))
+#yi = yi.astype(int)
+#zi = zi.astype(int)
+
+#to plot the surface cells on the density map 
+#first create a meshgrid from the y and z coordinates
+#numpy meshgrid takes the two coordinate vectors and makes a coordinate matrix
+#then use the equation of a circle x**2 + y**2 = r**2
+#this ensures surface cells are connected circularly
+
 YC,ZC = np.meshgrid(yc,zc)
 out = YC ** 2 + ZC ** 2 - radius ** 2 
+
+#plt contour is used to plot the surface cells
+ax = plt.contour(YC,ZC,out, [0])
 plt.imshow(density_ppcc[ x_slice,:,  :].T,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
 plt.colorbar(label='Density [#/m**3]')
-#plt.contourf(YC,ZC,YC**2+ZC**2)
-plt.contour(YC,ZC,out, [0])
-#plt.xlabel('Y [km]')
-#plt.ylabel('Z [km]')
-#plt.title('Density [#/m**3]')
+plt.xlabel('Y [km]')
+plt.ylabel('Z [km]')
+plt.title('Density [#/m**3] with Equation of the Circle Outlined')
 plt.show()
+
+#we have the y + z coords of each cell
+#but they don't take the circular shape of europa into account
+#allsegs is a func which returns the points of a contour line
+#below array_split splits line 1 ([0] aka the only line)
+#into 2 arrays. axis=0 means rows, axis=1 means columns
+coordinate = np.array_split(ax.allsegs[0][0],2,axis = 1)
+z_coordinates = np.array(coordinate[0])
+y_coordinates= np.array(coordinate[1])
+z_coordinates_transposed = z_coordinates * -1
+y_coordinates_transposed = y_coordinates *-1
+z_coordinates = np.append(z_coordinates,z_coordinates_transposed)
+y_coordinates = np.append(y_coordinates,y_coordinates_transposed)
+
+#using the index calculator all indexes can be found and converted to integers
+y_index = Index_Calculator(y_coordinates)
+z_index = Index_Calculator(z_coordinates)
+y_index = y_index.astype(int)
+z_index = z_index.astype(int)
+
+#to confirm coordinates are correct we print a scatter plot of our density map
+plt.imshow(density_ppcc[ x_slice,:,  :].T,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
+plt.colorbar(label='Density [#/m**3]')
+plt.scatter(y_coordinates,z_coordinates, s=0.8, c='darkslategrey')
+plt.xlabel('Y [km]')
+plt.ylabel('Z [km]')
+plt.title('Density [#/m**3] with Surface Cells as Scattered Points')
+plt.show()
+
+#the densities of the surface cells can now be stored
+surface_densities = (density_ppcc[x_slice,y_index,z_index])
