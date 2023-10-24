@@ -70,6 +70,7 @@ def Index_Calculator(coord):
     initial_coord = -2995.
     factor = 10
     index = ((coord-initial_coord)/factor)
+    index = np.round(index).astype(int)
     return (index)
 
 #initialising empty lists
@@ -189,136 +190,85 @@ print(out)
 #into 2 arrays. axis=0 means rows, axis=1 means columns
 coordinate = np.array_split(ax.allsegs[0][0],2,axis = 1)
 z_coordinates = np.array(coordinate[0])
-y_coordinates= np.array(coordinate[1])
+surface_ycoords= np.array(coordinate[1])
 z_coordinates_transposed = z_coordinates * -1
-y_coordinates_transposed = y_coordinates *-1
+y_coordinates_transposed = surface_ycoords *-1
 z_coordinates = np.append(z_coordinates,z_coordinates_transposed)
-y_coordinates = np.append(y_coordinates,y_coordinates_transposed)
+surface_ycoords = np.append(surface_ycoords,y_coordinates_transposed)
 
 #using the index calculator all indexes can be found 
 #and converted to integers using astype(int)
-
-y_index = Index_Calculator(y_coordinates)
-z_index = Index_Calculator(z_coordinates)
-y_index = y_index.astype(int)
-z_index = z_index.astype(int)
+surface_yindex = Index_Calculator(surface_ycoords)
+surface_zindex = Index_Calculator(z_coordinates)
 outer = density_ppcc[ x_slice,:,  :].T
 
-#print(y_coordinates)
-#the densities of the surface cells can now be stored in an array
-#and plotted
-surface_densities = density_ppcc[x_slice,y_index,z_index]
-
-plt.plot(surface_densities,y_index)
-plt.title("Surface Density vs Surface Index")
-plt.xlabel("Surface Density")
-plt.ylabel("Surface Index")
-plt.show()
 
 #this code creates a scatter plot of the density 
 #along the yz axes simultaneously
 #some of the coordinates lie in the centre of the circle so first they're removed in a for loop
-zero = []
-yzero = []
-for i in range(len(surface_densities)):
-    if surface_densities[i] == 0:
-        y_coordinates[i] = y_coordinates[i] 
-        z_coordinates[i] = z_coordinates[i] 
-y_index = Index_Calculator(y_coordinates)
-z_index = Index_Calculator(z_coordinates)
-y_index = y_index.astype(int)
-z_index = z_index.astype(int)
-surface_densities = density_ppcc[x_slice,y_index,z_index]
+
 plt.imshow(outer,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
 plt.colorbar(label='Density [#/cc]')
 plt.xlabel('Y [km]',fontsize=12)
 plt.ylabel('Z [km]',fontsize=12)
 plt.title('Density [in particles per cubic cm] with Surface Cells as Scattered Points',fontsize=12)
-plt.scatter(y_coordinates,z_coordinates,0.5, c='midnightblue')
+plt.scatter(surface_ycoords,z_coordinates,0.5, c='midnightblue')
 plt.show()
 
 #now we can plot the density distributions
 #the x axis corresponds to the point on the surface
 #starting at 0 (plume source) and goiing anticlockwise
 #the y axis corresponds to the number of cells with that density
-plt.plot(surface_densities, marker='.', c="indigo")
-plt.title("Surface Densities starting at Europa's South Pole and progressing anti-clockwise",fontsize=12)
-plt.ylabel("Density on a Log Scale",fontsize=12)
-plt.xlabel("Point on Europa's Surface",fontsize=12)
-plt.yscale("log")
-plt.grid(True)
-plt.show()
-mp = 1066/2
-
-
-eek = []
-for j in range(len(surface_densities)):
-    if surface_densities[j] >= 1e4:
-        eek.append(j)
-        print(y_coordinates[j])
-        print(surface_densities[j])
-
 
 def MassFlux(p,A,V):
     m = p*A*V
     return m
 
-v = inp.v0[2] 
-a = inp.gridCellDim1D
+velocity = inp.v0[2] 
+area = inp.gridCellDim1D
 
-#this creates a plot of the mass flux for each surface cell
-plt.plot(MassFlux(surface_densities,a,v),marker='.')
-plt.title("Mass Flux of the Surface Cells")
-plt.ylabel("Mass Flux []")
-plt.yscale("symlog")
-plt.show()
+#h = Counter(z_index) 
+#cc = np.dstack((y_index,z_index)) 
+#print(h)
+#ugh =[]
+#for i in range(0,len(z_index)):
+#    if (z_index[i]) == 414:
+#        ugh.append(i)
+#plt.imshow(outer,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
+#plt.colorbar(label='Density [#/m**3]')
+#plt.xlabel('Y [km]')
+#plt.ylabel('Z [km]')
+#plt.title('Density [#/m**3] with Surface Cells as Scattered Points')
+#plt.scatter(y_coordinates[(y_index[ugh])],z_coordinates[(z_index[ugh])],10)
+#plt.show()
 
-mf = MassFlux(surface_densities,a,v)
-print(len(mf),len(y_coordinates),len(z_coordinates),len(surface_densities))
+#print(ugh)
+#print(y_coordinates[(y_index[ugh])], z_coordinates[(z_index[ugh])])
+#hmm = []
+#for i in range(len(surface_densities)):
+#    if surface_densities[i] == 0.0:
+#        hmm.append(i)
+#plt.imshow(outer,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
+#plt.colorbar(label='Density [#/cc]')
+#plt.xlabel('Y [km]',fontsize=12)
+#plt.ylabel('Z [km]',fontsize=12)
+#plt.title('Density [in particles per cubic cm] with Surface Cells as Scattered Points',fontsize=12)
+#plt.show()
 
-h = Counter(z_index) 
-cc = np.dstack((y_index,z_index)) 
-print(h)
-ugh =[]
-for i in range(0,len(z_index)):
-    if (z_index[i]) == 414:
-        ugh.append(i)
-plt.imshow(outer,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
-plt.colorbar(label='Density [#/m**3]')
-plt.xlabel('Y [km]')
-plt.ylabel('Z [km]')
-plt.title('Density [#/m**3] with Surface Cells as Scattered Points')
-plt.scatter(y_coordinates[(y_index[ugh])],z_coordinates[(z_index[ugh])],10)
-plt.show()
-
-print(ugh)
-print(y_coordinates[(y_index[ugh])], z_coordinates[(z_index[ugh])])
-hmm = []
-for i in range(len(surface_densities)):
-    if surface_densities[i] == 0.0:
-        hmm.append(i)
-plt.imshow(outer,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
-plt.colorbar(label='Density [#/cc]')
-plt.xlabel('Y [km]',fontsize=12)
-plt.ylabel('Z [km]',fontsize=12)
-plt.title('Density [in particles per cubic cm] with Surface Cells as Scattered Points',fontsize=12)
-plt.show()
-brrr = Index_Calculator(y_coordinates)
-hrrr = Index_Calculator(z_coordinates)
-
-brrr = np.round(brrr).astype(int)
-hrrr = np.round(hrrr).astype(int)
-print(len(brrr),len(hrrr))
-plt.plot(density_ppcc[300,brrr,hrrr], marker='.', c="indigo")
+plt.plot(density_ppcc[300,surface_yindex,surface_zindex], marker='.', c="indigo")
 plt.title("Surface Densities starting at Europa's South Pole and progressing anti-clockwise",fontsize=12)
 plt.ylabel("Density on a Log Scale",fontsize=12)
 plt.xlabel("Point on Europa's Surface",fontsize=12)
 plt.yscale("log")
 plt.grid(True)
 plt.show()
-
-print(np.min(y[brrr]),np.min(z[hrrr]))
-
+surface_densities = density_ppcc[x_slice,surface_yindex,surface_zindex]
 
 
-
+plt.plot(MassFlux(surface_densities,area,velocity),marker='.')
+plt.title("Mass Flux on the Surface starting at Europa's South Pole and progressing anti-clockwise",fontsize=12)
+plt.ylabel("Mass Flux on a SymLog Scale",fontsize=12)
+plt.xlabel("Point on Europa's Surface",fontsize=12)
+plt.yscale("symlog")
+plt.grid(True)
+plt.show()
