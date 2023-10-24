@@ -5,6 +5,8 @@ import plotly.express as pe
 import os
 import math
 
+from collections import Counter                                                                                                                                                                                                                                                   
+
 #the following code is used to load the densityStorage.npy file
 #the path file will need to be changed if run on another device. 
 f = np.load(r"C:\Users\Isabelle\Documents\europa_tommy_100\input\densityStorage.npy", allow_pickle=True)
@@ -70,9 +72,6 @@ def Index_Calculator(coord):
     index = ((coord-initial_coord)/factor)
     return (index)
 
-print(f"The index of the positive radius is {Index_Calculator(radius)}")
-print(f"The index of the negative radius is {Index_Calculator(-radius)}")
-
 #initialising empty lists
 #these are to store the z and y coordinates of the surface cells for each quadrant of the circle
 zc = []
@@ -84,7 +83,15 @@ yc = []
 second_yq = []
 third_yq = []
 last_yq = []
+zfi = []
+zsi = []
+zti = []
+zli = []
 
+yfi = []
+ysi = []
+yti = []
+yli = []
 #using the index calculator, i=300 is coord=0, i=456 coord=radius, i=143 coord=-radius
 #so we want every coordinate between 300-456,456-300,300-143,143-300
 #adding these coords to the y and z axis respectively
@@ -98,6 +105,22 @@ for n in range(143,301):
 for n in range(144,300):
     thirdzc.append(z[n])
 
+for i in range(300,457):
+    zfi.append(i)
+for i in range(300,456):
+    zsi.append(i)
+for n in range(143,301):
+    zli.append(n)
+for n in range(144,300):
+    zti.append(n)
+zfi = np.array(zfi)
+zsi = (zsi)[::-1]
+zfi = np.append(zfi,zsi)
+zli = (np.array(zli))#[::-1]
+zti = (np.array(zti))[::-1]
+zli = np.append(zti,zli)
+zfi = np.append(zfi,zli)
+
 for n in range(143,301):
     yc.append(y[n])
 for i in range(301, 457):
@@ -107,6 +130,20 @@ for i in range(301,456):
 for i in range(144,300):
     last_yq.append(y[i])
 
+for n in range(143,301):
+    yfi.append(n)
+for i in range(301, 457):
+    ysi.append(i)
+for i in range(300,456):
+    yti.append(i)
+for i in range(143,300):
+    yli.append(i)
+yfi = np.array(yfi)
+yli = (yli[::-1])
+yti = ((yti)[::-1])
+yti = np.append(yti,yli)
+ysi = np.append(ysi,yti)
+yfi = np.append(yfi,ysi)
 #in the case of 456-300 and 300-143, python outputs zero
 #to fix this we get the list from 300-456, 143-300
 #we then use [::-1] which tells python to reverse the list
@@ -144,7 +181,7 @@ plt.xlabel('Y [km]')
 plt.ylabel('Z [km]')
 plt.title('Density [#/m**3] with Equation of the Circle Outlined')
 plt.show()
-
+print(out)
 #we have the y + z coords of each cell
 #but they don't take the circular shape of europa into account
 #allsegs is a func which returns the points of a contour line
@@ -167,15 +204,6 @@ y_index = y_index.astype(int)
 z_index = z_index.astype(int)
 outer = density_ppcc[ x_slice,:,  :].T
 
-#to confirm coordinates are correct we print a scatter plot of our density map
-#plt.imshow(outer,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
-#plt.colorbar(label='Density [#/m**3]')
-#plt.scatter(y_coordinates,z_coordinates, s=0.8, c='black')
-#plt.xlabel('Y [km]')
-#plt.ylabel('Z [km]')
-#plt.title('Density [#/m**3] with Surface Cells as Scattered Points')
-#plt.show()
-
 #print(y_coordinates)
 #the densities of the surface cells can now be stored in an array
 #and plotted
@@ -194,11 +222,8 @@ zero = []
 yzero = []
 for i in range(len(surface_densities)):
     if surface_densities[i] == 0:
-        #print(y_index[i],z_index[i])
-        #zero.append(i)
-        y_coordinates[i] = y_coordinates[i] + 5
-        z_coordinates[i] = z_coordinates[i] + 5
-        #surface_densities[i] = surface_densities[i+2]
+        y_coordinates[i] = y_coordinates[i] 
+        z_coordinates[i] = z_coordinates[i] 
 y_index = Index_Calculator(y_coordinates)
 z_index = Index_Calculator(z_coordinates)
 y_index = y_index.astype(int)
@@ -206,29 +231,15 @@ z_index = z_index.astype(int)
 surface_densities = density_ppcc[x_slice,y_index,z_index]
 plt.imshow(outer,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
 plt.colorbar(label='Density [#/cc]')
-#plt.scatter(y_coordinates,z_coordinates, s=0.8, c='black')
 plt.xlabel('Y [km]',fontsize=12)
 plt.ylabel('Z [km]',fontsize=12)
 plt.title('Density [in particles per cubic cm] with Surface Cells as Scattered Points',fontsize=12)
 plt.scatter(y_coordinates,z_coordinates,0.5, c='midnightblue')
 plt.show()
-#surface_densities = np.delete(surface_densities,zero)
-#y_coordinates = np.delete(y_coordinates,zero)
-#z_coordinates = np.delete(z_coordinates,zero)
 
-#print(len(surface_densities),len(y_coordinates),len(z_coordinates))
-#fig, ax1 = plt.subplots()
-#ax1.scatter(surface_densities, y_coordinates,2, color='darkblue')
-#ax2 = ax1.twinx()
-#ax2.scatter(surface_densities, z_coordinates,2, color='darkorange')
-#fig.tight_layout()
-#plt.title("Densities of each Y Coordinate (blue) and Z Coordinate (orange)")
-#plt.xlabel("Density")
-#plt.show()
-
-
-#now we can plot a histogram of the density distributions
-#the x axis corresponds to the density value
+#now we can plot the density distributions
+#the x axis corresponds to the point on the surface
+#starting at 0 (plume source) and goiing anticlockwise
 #the y axis corresponds to the number of cells with that density
 plt.plot(surface_densities, marker='.', c="indigo")
 plt.title("Surface Densities starting at Europa's South Pole and progressing anti-clockwise",fontsize=12)
@@ -238,8 +249,7 @@ plt.yscale("log")
 plt.grid(True)
 plt.show()
 mp = 1066/2
-plt.scatter(y_index,z_index, 0.1)
-plt.show()
+
 
 eek = []
 for j in range(len(surface_densities)):
@@ -248,24 +258,66 @@ for j in range(len(surface_densities)):
         print(y_coordinates[j])
         print(surface_densities[j])
 
-plt.imshow(outer,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
-plt.colorbar(label='Density [#/m**3]')
-#plt.scatter(y_coordinates,z_coordinates, s=0.8, c='black')
-plt.xlabel('Y [km]')
-plt.ylabel('Z [km]')
-plt.title('Density [#/m**3] with Surface Cells as Scattered Points')
-plt.scatter(y_coordinates[eek],z_coordinates[eek],0.5)
-plt.show()
 
 def MassFlux(p,A,V):
     m = p*A*V
     return m
 
-v = inp.v0[2]
+v = inp.v0[2] 
 a = inp.gridCellDim1D
+
+#this creates a plot of the mass flux for each surface cell
 plt.plot(MassFlux(surface_densities,a,v),marker='.')
+plt.title("Mass Flux of the Surface Cells")
+plt.ylabel("Mass Flux []")
 plt.yscale("symlog")
 plt.show()
+
+mf = MassFlux(surface_densities,a,v)
+print(len(mf),len(y_coordinates),len(z_coordinates),len(surface_densities))
+
+h = Counter(z_index) 
+cc = np.dstack((y_index,z_index)) 
+print(h)
+ugh =[]
+for i in range(0,len(z_index)):
+    if (z_index[i]) == 414:
+        ugh.append(i)
+plt.imshow(outer,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
+plt.colorbar(label='Density [#/m**3]')
+plt.xlabel('Y [km]')
+plt.ylabel('Z [km]')
+plt.title('Density [#/m**3] with Surface Cells as Scattered Points')
+plt.scatter(y_coordinates[(y_index[ugh])],z_coordinates[(z_index[ugh])],10)
+plt.show()
+
+print(ugh)
+print(y_coordinates[(y_index[ugh])], z_coordinates[(z_index[ugh])])
+hmm = []
+for i in range(len(surface_densities)):
+    if surface_densities[i] == 0.0:
+        hmm.append(i)
+plt.imshow(outer,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
+plt.colorbar(label='Density [#/cc]')
+plt.xlabel('Y [km]',fontsize=12)
+plt.ylabel('Z [km]',fontsize=12)
+plt.title('Density [in particles per cubic cm] with Surface Cells as Scattered Points',fontsize=12)
+plt.show()
+brrr = Index_Calculator(y_coordinates)
+hrrr = Index_Calculator(z_coordinates)
+
+brrr = np.round(brrr).astype(int)
+hrrr = np.round(hrrr).astype(int)
+print(len(brrr),len(hrrr))
+plt.plot(density_ppcc[300,brrr,hrrr], marker='.', c="indigo")
+plt.title("Surface Densities starting at Europa's South Pole and progressing anti-clockwise",fontsize=12)
+plt.ylabel("Density on a Log Scale",fontsize=12)
+plt.xlabel("Point on Europa's Surface",fontsize=12)
+plt.yscale("log")
+plt.grid(True)
+plt.show()
+
+print(np.min(y[brrr]),np.min(z[hrrr]))
 
 
 
