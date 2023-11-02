@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.colors as colors
+import europa_input_neutral 
 
 #the following code is used to load the densityStorage.npy file
 #the path file will need to be changed if run on another device. 
@@ -17,10 +18,26 @@ z /= 1000
 #density is expressed as 'superparticles' (packages of particles)
 #to get a density output of individual particles we must factorise
 #import europa_input_neutral.py and extract the INPUT() func to do this
-import europa_input_neutral 
 inp = europa_input_neutral.INPUT()
 #if the above code doesn't work, ensure all necessary files downloaded
 #and are in the same directory
+
+#europa's radius can be extracted from europa_input_neutral as below
+radius = (inp.rEuropa)/1000 #converts to [km]
+
+#the following function calculates what the index is at a desired coordinate 
+#using numpy func to round the index up/down and astype(int) to convert float to integer values
+def Index_Calculator(coord):
+    initial_coord = -2995.
+    factor = 10
+    index = ((coord-initial_coord)/factor)
+    index = np.round(index).astype(int)
+    return (index)
+
+#then we can use the formula for mass flux to get the flux of each surface cell
+def MassFlux(p,A,V):
+    m = p*A*V
+    return m
 
 #create a func to vary initial inputs of mass flux, eruption time, and time after eruption
 #this func outputs the densities, mass fluxes, and particle numbers on europa's surface
@@ -45,18 +62,7 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
     plt.show()
 
 #now trying to determine surface cells
-#europa's radius can be extracted from europa_input_neutral as below
-    radius = (inp.rEuropa)/1000 #converts to [km]
 #there will be a surface at z[radius],[-radius],y[radius],[-radius]
-
-#the following function calculates what the index is at a desired coordinate 
-#using numpy func to round the index up/down and astype(int) to convert float to integer values
-    def Index_Calculator(coord):
-        initial_coord = -2995.
-        factor = 10
-        index = ((coord-initial_coord)/factor)
-        index = np.round(index).astype(int)
-        return (index)
 
 #initialising empty lists
 #these are to store the z and y coordinates of the surface cells for each quadrant of the circle
@@ -170,11 +176,6 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
     plt.grid(True)
     plt.show()
 
-#then we can use the formula for mass flux to get the flux of each surface cell
-    def MassFlux(p,A,V):
-        m = p*A*V
-        return m
-
     velocity = inp.v0[2] * -1
     area = (10**2)
     surface_densities = density_ppcc[x_slice,SurfaceIndex_y,SurfaceIndex_z]
@@ -212,5 +213,4 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
     plt.grid(True)
     plt.show()
 
-
-DensityChange(100,30000,172800)
+DensityChange(1,30000,1)
