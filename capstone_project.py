@@ -7,13 +7,13 @@ import europa_input_neutral
 #the path file will need to be changed if run on another device. 
 f = np.load(r"C:\Users\Isabelle\Documents\europa_tommy_100\input\densityStorage.npy", allow_pickle=True)
 #splitting the file into x-y-z coordinates and density data
-x, y, z = f[1]
-density = f[0]
-#density *= 1000
+x, y, z = f[1]      #[m]
+density = f[0]      #[superparticles]
+
 #x-y-z are given in meters and are converted to kilometers below
-x /= 1000
-y /= 1000
-z /= 1000
+x /= 1000       #[km]
+y /= 1000       #[km]
+z /= 1000       #[km]
 
 #density is expressed as 'superparticles' (packages of particles)
 #to get a density output of individual particles we must factorise
@@ -23,12 +23,12 @@ inp = europa_input_neutral.INPUT()
 #and are in the same directory
 
 #europa's radius can be extracted from europa_input_neutral as below
-radius = (inp.rEuropa)/1000 #converts to [km]
+radius = (inp.rEuropa)/1000     #[km]
 
 #the following function calculates what the index is at a desired coordinate 
 #using numpy func to round the index up/down and astype(int) to convert float to integer values
 def Index_Calculator(coord):
-    initial_coord = -2995.
+    initial_coord = -2995.      #[km]
     factor = 10
     index = ((coord-initial_coord)/factor)
     index = np.round(index).astype(int)
@@ -43,9 +43,9 @@ def MassFlux(p,A,V):
 #this func outputs the densities, mass fluxes, and particle numbers on europa's surface
 #both during and after an eruption.
 def DensityChange(density_factor,eruption_time,time_post_eruption):
-    density = f[0]
+    density = f[0]      #[superparticles]
     density *= density_factor
-    density_ppcc = density * inp.conversionFactor_density_ppcc
+    density_ppcc = density * inp.conversionFactor_density_ppcc      #[H2O particles per cm**3]
 
 #the code below attempts to replicate the given figure 8bb from tommy's output
 #in this case the yz axes are being plotted while the x-axis is being sliced
@@ -55,10 +55,10 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
 #x_slice is set to 300 because it will view europa at the exact centre
     x_slice = 300
     plt.imshow(density_ppcc[ x_slice,:,  :].T,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
-    plt.colorbar(label='Density [#/m**3]')
+    plt.colorbar(label='Density [#/$cm^{3}$]')
     plt.xlabel('Y [km]',fontsize=12)
     plt.ylabel('Z [km]',fontsize=12)
-    plt.title('Density [#/m**3] of Europas Atmosphere',fontsize=12)
+    plt.title('Density [#/$cm^{3}$] of Plume Deposits on Europa',fontsize=12)
     plt.show()
 
 #now trying to determine surface cells
@@ -110,14 +110,14 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
     LastQuad_z = (np.array(LastQuad_z))#[::-1]
     ThirdQuad_z = (np.array(ThirdQuad_z))[::-1]
     LastQuad_z = np.append(ThirdQuad_z,LastQuad_z)
-    z_coordinates = np.append(z_coordinates,LastQuad_z)
+    z_coordinates = np.append(z_coordinates,LastQuad_z)     #[km]
 
     y_coordinates = np.array(y_coordinates)
     LastQuad_y = (y_coordinates[::-1])
     ThirdQuad_y = ((ThirdQuad_y)[::-1])
     ThirdQuad_y = np.append(ThirdQuad_y,LastQuad_y)
     SecondQuad_y = np.append(SecondQuad_y,ThirdQuad_y)
-    y_coordinates = np.append(y_coordinates,SecondQuad_y)
+    y_coordinates = np.append(y_coordinates,SecondQuad_y)       #[km]
 
 #to plot the surface cells on the density map 
 #first create a meshgrid from the y and z coordinates
@@ -125,7 +125,7 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
 #then use the equation of a circle x**2 + y**2 = r**2
 #this ensures surface cells are connected circularly
     YC,ZC = np.meshgrid(y_coordinates,z_coordinates)
-    circumference = YC ** 2 + ZC ** 2 - radius ** 2 
+    circumference = YC ** 2 + ZC ** 2 - radius ** 2     #[km]
 
 #plt contour is used to plot the surface cells
     ax = plt.contour(YC,ZC,circumference, [0])
@@ -176,10 +176,11 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
     plt.grid(True)
     plt.show()
 
-    velocity = inp.v0[2] * -1
-    area = (10**2)
-    surface_densities = density_ppcc[x_slice,SurfaceIndex_y,SurfaceIndex_z]
-    cell_flux = MassFlux(surface_densities,area,velocity)
+    velocity = inp.v0[2] * -100     #[cm/s]
+    area_m = ((inp.gridCellDim1D))**2       #[m**2]
+    area = (((inp.gridCellDim1D))**2)*10000     #[cm**2]
+    surface_densities = density_ppcc[x_slice,SurfaceIndex_y,SurfaceIndex_z]     #[H2O/cm**3]
+    cell_flux = MassFlux(surface_densities,area,velocity)       #[H2O/s]
 
     plt.plot(cell_flux,marker='.')
     plt.title("Mass Flux on the Surface starting at Europa's South Pole and progressing anti-clockwise",fontsize=12)
@@ -191,7 +192,7 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
 
 #the cell flux is in units of particle number per second
 #to convert to particle number, multiply by time
-    particle_number = cell_flux * eruption_time
+    particle_number = cell_flux * eruption_time     #[H2O]
     plt.plot(particle_number,marker='.',c="teal")
     plt.title("Particles on the Surface starting at Europa's South Pole and progressing anti-clockwise",fontsize=12)
     plt.ylabel("Particles on a Log Scale",fontsize=12)
@@ -203,8 +204,10 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
 #from Plainaki 2009, the rate of particles sputtering from Europa's surface is 3.2e13 per second
 #multiplying this by the time post-eruption, we can subtract it from the particle numbers
 #to find out how many particles remain on the surface (particles_pe = particles post eruption)
-    sputter_rate = ((3.2e13)*time_post_eruption)
-    particles_pe = particle_number - sputter_rate
+    #particle_number /= area
+    sputter_rate = (3.2e13)     #[H2O/s/m**2]
+    particle_loss = (sputter_rate)*(time_post_eruption)*(area_m)        #[H2O]
+    particles_pe = (particle_number) - particle_loss        #[H2O]
     plt.plot(particles_pe,marker='.',c="teal")
     plt.title("Particles left on the Surface starting at Europa's South Pole and progressing anti-clockwise",fontsize=12)
     plt.ylabel("Particles on a Log Scale",fontsize=12)
@@ -213,4 +216,3 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
     plt.grid(True)
     plt.show()
 
-DensityChange(1,30000,1)
