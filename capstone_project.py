@@ -10,11 +10,6 @@ f = np.load(r"C:\Users\Isabelle\Documents\europa_tommy_100\input\densityStorage.
 x, y, z = f[1]      #[m]
 density = f[0]      #[superparticles]
 
-#x-y-z are given in meters and are converted to kilometers below
-x /= 1000       #[km]
-y /= 1000       #[km]
-z /= 1000       #[km]
-
 #density is expressed as 'superparticles' (packages of particles)
 #to get a density output of individual particles we must factorise
 #import europa_input_neutral.py and extract the INPUT() func to do this
@@ -23,13 +18,15 @@ inp = europa_input_neutral.INPUT()
 #and are in the same directory
 
 #europa's radius can be extracted from europa_input_neutral as below
-radius = (inp.rEuropa)/1000     #[km]
+radius = (inp.rEuropa)     #[m]
+velocity = inp.v0[2] * -1    #[m/s]
+area = (((inp.gridCellDim1D))**2)    #[m**2]
 
 #the following function calculates what the index is at a desired coordinate 
 #using numpy func to round the index up/down and astype(int) to convert float to integer values
 def Index_Calculator(coord):
-    initial_coord = -2995.      #[km]
-    factor = 10
+    initial_coord = -2995. *1000      #[m]
+    factor = 10 * 1000      #[m]
     index = ((coord-initial_coord)/factor)
     index = np.round(index).astype(int)
     return (index)
@@ -38,6 +35,13 @@ def Index_Calculator(coord):
 def MassFlux(p,A,V):
     m = p*A*V
     return m
+
+#this function converts from years to seconds
+def YearsToSeconds(years):
+    leap_year = years/4
+    seconds = years * (24*365*3600)
+    seconds -= leap_year
+    return seconds
 
 #create a func to vary initial inputs of mass flux, eruption time, and time after eruption
 #this func outputs the densities, mass fluxes, and particle numbers on europa's surface
@@ -56,13 +60,16 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
     x_slice = 300
     plt.imshow(density_ppcc[ x_slice,:,  :].T,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
     plt.colorbar(label='Density [#/$cm^{3}$]')
-    plt.xlabel('Y [km]',fontsize=12)
-    plt.ylabel('Z [km]',fontsize=12)
+    plt.xlabel('Y [m]',fontsize=12)
+    plt.ylabel('Z [m]',fontsize=12)
     plt.title('Density [#/$cm^{3}$] of Plume Deposits on Europa',fontsize=12)
     plt.show()
 
 #now trying to determine surface cells
-#there will be a surface at z[radius],[-radius],y[radius],[-radius]
+#the surface of europa is shaped like a circle 
+#so there will be a coordinate at z[radius],[-radius],y[radius],[-radius]
+#we want to get all the points of the surface between these indexes
+#to do that, we take the index for each quadrant: 0 - radius, radius - 0, 0 - -radius, -radius - 0
 
 #initialising empty lists
 #these are to store the z and y coordinates of the surface cells for each quadrant of the circle
@@ -76,21 +83,30 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
     ThirdQuad_y = []
     LastQuad_y = []
 
+    print(f"The index for the positive radius coordinate is {Index_Calculator(radius)}")
+    print(f"The index for the negative radius coordinate is {Index_Calculator(-radius)}")
+    print(f"The index for the zero coordinate is {Index_Calculator(0)}")   
 #using the index calculator, i=300 is coord=0, i=456 coord=radius, i=143 coord=-radius
-#so we want every coordinate between 300-456,456-300,300-143,143-300
-#adding these coords to the y and z axis respectively
-#by using for loops, ensuring no repitition of the values.
+#so the index for each quadrant is from 300-456,456-300,300-143,143-300
+#in the case of 456-300 and 300-143, python outputs zero
+#to fix this we get the list from 300-456, 143-300, then reverse the list later
+
+#adding these coords to the empty lists by using for loops
     for i in range(300,457):
         z_coordinates.append(z[i])
+#using range 300-457 and 300-456 ensures z[456] isn't repeated
     for i in range(300,456):
         SecondQuad_z.append(z[i])
+#using range 143-301 and 144-300 ensures z[143] isn't repeated
     for n in range(143,301):
         LastQuad_z.append(z[n])
     for n in range(144,300):
         ThirdQuad_z.append(z[n])
 
+#using range 143-301 and 144-300 ensures y[143] isn't repeated
     for n in range(143,301):
         y_coordinates.append(y[n])
+#using range 301-457 and 301-456 ensures y[456] isn't repeated
     for i in range(301, 457):
         SecondQuad_y.append(y[i])
     for i in range(301,456):
@@ -98,42 +114,42 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
     for i in range(144,300):
         LastQuad_y.append(y[i])
 
-
-#in the case of 456-300 and 300-143, python outputs zero
-#to fix this we get the list from 300-456, 143-300
-#we then use [::-1] which tells python to reverse the list
+#we then use [::-1] which tells python to reverse the list where necessary
 #using np.array, the lists are converted to arrays
 #the four arrays are combined to a single array using np.append
+
     z_coordinates = np.array(z_coordinates)
     SecondQuad_z = (SecondQuad_z)[::-1]
     z_coordinates = np.append(z_coordinates,SecondQuad_z)
-    LastQuad_z = (np.array(LastQuad_z))#[::-1]
+    LastQuad_z = (np.array(LastQuad_z))
     ThirdQuad_z = (np.array(ThirdQuad_z))[::-1]
     LastQuad_z = np.append(ThirdQuad_z,LastQuad_z)
-    z_coordinates = np.append(z_coordinates,LastQuad_z)     #[km]
+    z_coordinates = np.append(z_coordinates,LastQuad_z)     #[m]
 
     y_coordinates = np.array(y_coordinates)
     LastQuad_y = (y_coordinates[::-1])
     ThirdQuad_y = ((ThirdQuad_y)[::-1])
     ThirdQuad_y = np.append(ThirdQuad_y,LastQuad_y)
     SecondQuad_y = np.append(SecondQuad_y,ThirdQuad_y)
-    y_coordinates = np.append(y_coordinates,SecondQuad_y)       #[km]
+    y_coordinates = np.append(y_coordinates,SecondQuad_y)       #[m]
 
+#we now have two arrays for the y and z coordinates of europa's surface, respectively
+    print(len(y_coordinates),len(z_coordinates))
 #to plot the surface cells on the density map 
 #first create a meshgrid from the y and z coordinates
 #numpy meshgrid takes the two coordinate vectors and makes a coordinate matrix
-#then use the equation of a circle x**2 + y**2 = r**2
+#then use the equation of a circle x**2 + y**2 = r**2 to get the circumference of europa's midsection
 #this ensures surface cells are connected circularly
     YC,ZC = np.meshgrid(y_coordinates,z_coordinates)
-    circumference = YC ** 2 + ZC ** 2 - radius ** 2     #[km]
+    circumference = YC ** 2 + ZC ** 2 - radius ** 2     #[m]
 
-#plt contour is used to plot the surface cells
+#plt contour is used to overlay the surface cells on the plot
     ax = plt.contour(YC,ZC,circumference, [0])
     plt.imshow(density_ppcc[ x_slice,:,  :].T,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
     plt.colorbar(label='Density [#/m**3]')
-    plt.xlabel('Y [km]',fontsize=12)
-    plt.ylabel('Z [km]',fontsize=12)
-    plt.title('Density [#/m**3] with Equation of the Circle Outlined',fontsize=12)
+    plt.xlabel('Y [m]',fontsize=12)
+    plt.ylabel('Z [m]',fontsize=12)
+    plt.title('Density [#/$cm^{3}$] of Plume Deposits on Europa with Surface Cells Outlined',fontsize=12)
     plt.show()
 
 #we have the y + z coords of each cell
@@ -144,6 +160,8 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
     coordinates = np.array_split(ax.allsegs[0][0],2,axis = 1)
     z_coordinates = np.array(coordinates[0])
     surface_ycoords= np.array(coordinates[1])
+    print(z_coordinates)
+    print(surface_ycoords)
     z_coordinates_transposed = z_coordinates * -1
     y_coordinates_transposed = surface_ycoords *-1
     SurfaceCoordinates_z = np.append(z_coordinates,z_coordinates_transposed)
@@ -157,9 +175,9 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
 #and a scatter plot of the surface simultaneously
     plt.imshow(density_ppcc[ x_slice,:,  :].T,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
     plt.colorbar(label='Density [#/cc]')
-    plt.xlabel('Y [km]',fontsize=12)
-    plt.ylabel('Z [km]',fontsize=12)
-    plt.title('Density [in particles per cubic cm] with Surface Cells as Scattered Points',fontsize=12)
+    plt.xlabel('Y [m]',fontsize=12)
+    plt.ylabel('Z [m]',fontsize=12)
+    plt.title('Density [#/$cm^{3}$] of Plume Deposits on Europa with Surface Cells as Scattered Points',fontsize=12)
     plt.scatter(SurfaceCoordinates_y,SurfaceCoordinates_z,0.5, c='midnightblue')
     plt.show()
 
@@ -176,11 +194,9 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
     plt.grid(True)
     plt.show()
 
-    velocity = inp.v0[2] * -100     #[cm/s]
-    area_m = ((inp.gridCellDim1D))**2       #[m**2]
-    area = (((inp.gridCellDim1D))**2)*10000     #[cm**2]
     surface_densities = density_ppcc[x_slice,SurfaceIndex_y,SurfaceIndex_z]     #[H2O/cm**3]
-    cell_flux = MassFlux(surface_densities,area,velocity)       #[H2O/s]
+    print(surface_densities[8],area,velocity)
+    cell_flux = MassFlux(surface_densities,(area*10000),(velocity*1000))       #[H2O/cm**3] * [cm**2] * [cm/s] = [H2O/s]
 
     plt.plot(cell_flux,marker='.')
     plt.title("Mass Flux on the Surface starting at Europa's South Pole and progressing anti-clockwise",fontsize=12)
@@ -204,9 +220,8 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
 #from Plainaki 2009, the rate of particles sputtering from Europa's surface is 3.2e13 per second
 #multiplying this by the time post-eruption, we can subtract it from the particle numbers
 #to find out how many particles remain on the surface (particles_pe = particles post eruption)
-    #particle_number /= area
     sputter_rate = (3.2e13)     #[H2O/s/m**2]
-    particle_loss = (sputter_rate)*(time_post_eruption)*(area_m)        #[H2O]
+    particle_loss = (sputter_rate)*(time_post_eruption)*(area)        #[H2O]
     particles_pe = (particle_number) - particle_loss        #[H2O]
     plt.plot(particles_pe,marker='.',c="teal")
     plt.title("Particles left on the Surface starting at Europa's South Pole and progressing anti-clockwise",fontsize=12)
@@ -215,4 +230,5 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
     plt.yscale("symlog")
     plt.grid(True)
     plt.show()
-
+fifty = 100/6
+DensityChange(fifty,30000,(YearsToSeconds(5705)))
