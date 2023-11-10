@@ -38,9 +38,10 @@ def MassFlux(p,A,V):
 
 #this function converts from years to seconds
 def YearsToSeconds(years):
-    leap_year = years/4
-    seconds = years * (24*365*3600)
-    seconds -= leap_year
+    leap_year = (years/4)
+    seconds = (years-leap_year) * (24*365*3600)
+    leap_year *= (366*24*3600)
+    seconds += leap_year
     return seconds
 
 #create a func to vary initial inputs of mass flux, eruption time, and time after eruption
@@ -160,8 +161,6 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
     coordinates = np.array_split(ax.allsegs[0][0],2,axis = 1)
     z_coordinates = np.array(coordinates[0])
     surface_ycoords= np.array(coordinates[1])
-    print(z_coordinates)
-    print(surface_ycoords)
     z_coordinates_transposed = z_coordinates * -1
     y_coordinates_transposed = surface_ycoords *-1
     SurfaceCoordinates_z = np.append(z_coordinates,z_coordinates_transposed)
@@ -195,7 +194,6 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
     plt.show()
 
     surface_densities = density_ppcc[x_slice,SurfaceIndex_y,SurfaceIndex_z]     #[H2O/cm**3]
-    print(surface_densities[8],area,velocity)
     cell_flux = MassFlux(surface_densities,(area*10000),(velocity*1000))       #[H2O/cm**3] * [cm**2] * [cm/s] = [H2O/s]
 
     plt.plot(cell_flux,marker='.')
@@ -230,5 +228,3 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
     plt.yscale("symlog")
     plt.grid(True)
     plt.show()
-fifty = 100/6
-DensityChange(fifty,30000,(YearsToSeconds(5705)))
