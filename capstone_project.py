@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.colors as colors
 import europa_input_neutral 
 
+plt.rcParams["font.family"] = "Times New Roman"
+plt.rcParams["font.size"] = 12
 #the following code is used to load the densityStorage.npy file
 #the path file will need to be changed if run on another device. 
 f = np.load(r"C:\Users\Isabelle\Documents\europa_tommy_100\input\densityStorage.npy", allow_pickle=True)
@@ -32,8 +34,8 @@ def Index_Calculator(coord):
     return (index)
 
 #then we can use the formula for mass flux to get the flux of each surface cell
-def MassFlux(p,A,V):
-    m = p*A*V
+def MassFlux(rho,area,volume):
+    m = rho*area*volume
     return m
 
 #this function converts from years to seconds
@@ -44,6 +46,9 @@ def YearsToSeconds(years):
     seconds += leap_year
     return seconds
 
+def HoursToSeconds(hours):
+    seconds = hours * (60 *60)
+    return seconds
 #create a func to vary initial inputs of mass flux, eruption time, and time after eruption
 #this func outputs the densities, mass fluxes, and particle numbers on europa's surface
 #both during and after an eruption.
@@ -59,10 +64,10 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
 #origin is automatically set to 'upper' so it is manually set to 'lower' 
 #x_slice is set to 300 because it will view europa at the exact centre
     x_slice = 300
-    plt.imshow(density_ppcc[ x_slice,:,  :].T,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
+    plt.imshow(density_ppcc[ x_slice,:,  :].T,extent=[(x.min())/1000,(x.max())/1000,(z.min())/1000,(z.max())/1000],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
     plt.colorbar(label='Density [#/$cm^{3}$]')
-    plt.xlabel('Y [m]',fontsize=12)
-    plt.ylabel('Z [m]',fontsize=12)
+    plt.xlabel('Y [km]',fontsize=12)
+    plt.ylabel('Z [km]',fontsize=12)
     plt.title('Density [#/$cm^{3}$] of Plume Deposits on Europa',fontsize=12)
     plt.show()
 
@@ -173,26 +178,43 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
 #this code creates a colour plot of the density 
 #and a scatter plot of the surface simultaneously
     plt.imshow(density_ppcc[ x_slice,:,  :].T,extent=[x.min(),x.max(),z.min(),z.max()],origin = 'lower', cmap= 'plasma', norm=colors.LogNorm())
-    plt.colorbar(label='Density [#/cc]')
+    plt.colorbar(label='Density [#/$cm^{3}$]')
     plt.xlabel('Y [m]',fontsize=12)
     plt.ylabel('Z [m]',fontsize=12)
     plt.title('Density [#/$cm^{3}$] of Plume Deposits on Europa with Surface Cells as Scattered Points',fontsize=12)
     plt.scatter(SurfaceCoordinates_y,SurfaceCoordinates_z,0.5, c='midnightblue')
     plt.show()
 
+#creating an array corresponding to the km of each cell from the source
+    sd = density_ppcc[300,SurfaceIndex_y,SurfaceIndex_z]
+    x_axis = []
+    for i in range(624):
+        km = i * 10
+        x_axis.append(km)
+    reverse = (x_axis)[::-1]
+    x_axis = np.append(x_axis, reverse)
 #now we can plot the density distributions
 #the x axis corresponds to the point on the surface
 #starting at 0 (plume source) and going anticlockwise
 #the y axis corresponds to the density at that point
 
-    plt.plot(density_ppcc[300,SurfaceIndex_y,SurfaceIndex_z], marker='.', c="indigo")
-    plt.title("Surface Densities starting at Europa's South Pole and progressing anti-clockwise",fontsize=12)
+    plt.annotate("Plume Source", xy=(1, sd[0]),  xycoords='data',
+            bbox=dict(boxstyle="round", fc="none", ec="gray"),
+            xytext=(70, 0), textcoords='offset points', ha='center',
+            arrowprops=dict(arrowstyle="->"))
+    plt.annotate("North Pole", xy=(x_axis[624],sd[624]),  xycoords='data',
+            bbox=dict(boxstyle="round", fc="none", ec="gray"),
+            xytext=(-70, 5), textcoords='offset points', ha='center',
+            arrowprops=dict(arrowstyle="->"))
+    plt.plot(x_axis, density_ppcc[300,SurfaceIndex_y,SurfaceIndex_z], marker='.', c="darkorange")
+    plt.title("Density of particles on Europa's Surface",fontsize=12)
     plt.ylabel("Density on a Log Scale",fontsize=12)
-    plt.xlabel("Point on Europa's Surface",fontsize=12)
+    plt.xlabel("Distance from the Plume Source [km]",fontsize=12)
     plt.yscale("log")
+    
     plt.grid(True)
     plt.show()
-
+    print(len(density_ppcc[300,SurfaceIndex_y,SurfaceIndex_z]))
     surface_densities = density_ppcc[x_slice,SurfaceIndex_y,SurfaceIndex_z]     #[H2O/cm**3]
     cell_flux = MassFlux(surface_densities,(area*10000),(velocity*1000))       #[H2O/cm**3] * [cm**2] * [cm/s] = [H2O/s]
 
@@ -201,17 +223,23 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
     plt.ylabel("Mass Flux on a SymLog Scale",fontsize=12)
     plt.xlabel("Point on Europa's Surface",fontsize=12)
     plt.yscale("log")
+    plt.annotate("North Pole",(624,cell_flux[624]),textcoords="offset points", xytext=(0,10),ha='center')
+    plt.annotate("South Pole",(1247,cell_flux[1247]),textcoords="offset points", xytext=(0,10),ha='center')
+    plt.annotate("Plume Source",(0,cell_flux[0]),textcoords="offset points", xytext=(0,10),ha='center')
     plt.grid(True)
     plt.show()
 
 #the cell flux is in units of particle number per second
 #to convert to particle number, multiply by time
     particle_number = cell_flux * eruption_time     #[H2O]
-    plt.plot(particle_number,marker='.',c="teal")
+    plt.plot(particle_number,marker='.',c="darkorange")
     plt.title("Particles on the Surface starting at Europa's South Pole and progressing anti-clockwise",fontsize=12)
     plt.ylabel("Particles on a Log Scale",fontsize=12)
     plt.xlabel("Point on Europa's Surface",fontsize=12)
     plt.yscale("log")
+    plt.annotate("North Pole",(624,particle_number[624]),textcoords="offset points", xytext=(0,10),ha='center')
+    plt.annotate("South Pole",(1247,particle_number[1247]),textcoords="offset points", xytext=(0,10),ha='center')
+    plt.annotate("Plume Source",(0,particle_number[0]),textcoords="offset points", xytext=(0,10),ha='center')
     plt.grid(True)
     plt.show()
 
@@ -219,12 +247,22 @@ def DensityChange(density_factor,eruption_time,time_post_eruption):
 #multiplying this by the time post-eruption, we can subtract it from the particle numbers
 #to find out how many particles remain on the surface (particles_pe = particles post eruption)
     sputter_rate = (3.2e13)     #[H2O/s/m**2]
+    print(sputter_rate*area)
+    print(SurfaceCoordinates_y[332],SurfaceCoordinates_z[332])
     particle_loss = (sputter_rate)*(time_post_eruption)*(area)        #[H2O]
     particles_pe = (particle_number) - particle_loss        #[H2O]
-    plt.plot(particles_pe,marker='.',c="teal")
-    plt.title("Particles left on the Surface starting at Europa's South Pole and progressing anti-clockwise",fontsize=12)
-    plt.ylabel("Particles on a Log Scale",fontsize=12)
-    plt.xlabel("Point on Europa's Surface",fontsize=12)
+    plt.plot(x_axis,particles_pe,marker='.',c="yellowgreen")
+    plt.title("Particles left on the Surface after 20 years",fontsize=12)
+    plt.ylabel("Number of Particles on a Log Scale",fontsize=12)
+    plt.xlabel("Distance from Plume Source [km]",fontsize=12)
     plt.yscale("symlog")
+    plt.annotate("Plume Source", xy=(1, particles_pe[0]),  xycoords='data',
+            bbox=dict(boxstyle="round", fc="none", ec="gray"),
+            xytext=(70, 0), textcoords='offset points', ha='center',
+            arrowprops=dict(arrowstyle="->"))
+    plt.annotate("North Pole", xy=(x_axis[624],particles_pe[624]),  xycoords='data',
+            bbox=dict(boxstyle="round", fc="none", ec="gray"),
+            xytext=(-70, 5), textcoords='offset points', ha='center',
+            arrowprops=dict(arrowstyle="->"))
     plt.grid(True)
     plt.show()
