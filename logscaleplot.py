@@ -5,7 +5,7 @@ Created on Tue Jun 25 12:37:27 2024
 
 @author: marina
 
-This code shows the eruption time from less than an hour up to 6 months
+This code shows the eruption time from less than an hour up to 6 months in log-scale
 It calculates and shows the mass flux in kg/s, the range of interest [1,10000]kg/s
 The disappearance time is shown in terms of years for convenience for the reader
 
@@ -20,7 +20,7 @@ A = 10**8  # Area of the plume source (m^2)
 s_r = 3.2e13  # Sputtering rate (ptcls/sm²)
 H2O = 2.987e-26  # Kg per particle of H2O 
 
-sputtering_rate = s_r * H2O  # Sputtering (kg/sm²)
+sputtering_rate = s_r * H2O  # Sputtering convertion (kg/sm²)
 
 seconds_per_month = 2.628e6  # Conversion factor: seconds per month
 seconds_per_year = 3.154e+7 # Conversion factor: seconds per year
@@ -28,6 +28,7 @@ seconds_per_year = 3.154e+7 # Conversion factor: seconds per year
 # Define the ranges for eruption time and mass flux
 eruption_times = np.logspace(np.log10(0.0001), np.log10(9), 1000)  # Eruption times from less than 1 month to 6 months
 mass_flux_rates = np.arange(1, 10000 + 1, 5)  # Mass flux rates from 10 to 10,000 kg/s
+                                              # Stepsize = 5 to make it smoother
 
 # CALCULATIONS:
 # Calculate total particles erupted
@@ -65,15 +66,15 @@ contour_28 = plt.contour(mass_flux_grid, eruption_time_grid, Tmax_grid, levels=[
 plt.clabel(contour_28, inline=True, fontsize=10, fmt='28 years')
 
 # Highlight the specific point as this is the plume that was observed 
-example_mass_flux_rate = 3.5 # Example mass flux rate (in kg/s)
-example_eruption_time = 0.00015 # Example eruption time (converted to months)
+example_mass_flux_rate = 7000 # Example mass flux rate (in kg/s)
+example_eruption_time = 0.00958903 # Example eruption of 7h (converted to months)
 plt.plot(example_mass_flux_rate, example_eruption_time, 'ro')  # Red point
 plt.text(example_mass_flux_rate, example_eruption_time, '  (7000 kg/s, ~7h)', color='black')
 
 plt.xlabel('Mass Flux Rate (kg/s)')
 plt.ylabel('Eruption Time (months)')
 plt.yscale('log')  # Set y-axis to logarithmic scale
-plt.xscale ('log')
+plt.xscale ('log') # Set x-axis to logarithmic scale
 plt.title('Max Disappearance Time as Function of Mass Flux Rate and Eruption Time')
 plt.show()
 
