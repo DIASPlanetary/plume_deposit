@@ -74,7 +74,13 @@ for i in range(len(eruption_times)):
 # I did the labels for the contours manually because clabel() was not working properly 
 plt.figure(figsize=(8,  6))
 contour = plt.contour(mass_flux_grid, eruption_time_grid, Tmax_grid, levels=[10e-7,10e-6,10e-5, 10e-4,10e-3, 10e-2, 10e-1, 10, 10e2], colors='black', linewidths=0.5)
-
+plt.text (2.5, 1000, '1.0e-06' , fontsize = 8, color = 'black',  ha = 'left',  va = 'center') 
+plt.text (5, 5500, '1.0e-5' ,fontsize=8, color='black', ha='left', va='center') 
+plt.text (29, 8500, '1.0e-04' ,fontsize=8, color='black', ha='left', va='center') 
+plt.text (140, 17000, '1.0e-03' ,fontsize=8, color='black', ha='left', va='center')
+plt.text (200, 130000, '1.0e-02' ,fontsize=8, color='black', ha='left', va='center')
+plt.text (1100, 220000, '1.0e-01' ,fontsize=8, color='black', ha='left', va='center')
+plt.text (2500, 1e6, '1.0e+00' ,fontsize=8, color='black', ha='left', va='center')
 plt.pcolormesh(mass_flux_grid, eruption_time_grid, Tmax_grid, shading='auto', norm=LogNorm(), cmap='viridis')
 plt.colorbar(label='Erosion Time (years)')
 
