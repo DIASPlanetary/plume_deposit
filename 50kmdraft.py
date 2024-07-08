@@ -46,7 +46,7 @@ def calculate_mass_flux_falling(rho_step, A, v_avg):
 # Calculate total particles erupted
 def calculate_total_particles_eruption(massflux_f, t_eruption):
     N = massflux_f * t_eruption  # Convert time to seconds
-    return N #SOULDNT GIVE A FLOAT 
+    return N 
 
 
 # Calculate maximum disappearance time
