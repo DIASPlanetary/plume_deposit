@@ -4,6 +4,8 @@
 Created on Tue Jun 25 12:37:27 2024
 
 @author: marina
+
+This is when using the density for 25km away  radii from plume source  
 """
 
 import numpy as np
@@ -14,7 +16,7 @@ from matplotlib.colors import LogNorm
 A = 10**8  # Area of the plume source (m^2)
 v_avg = 460 # m/s 
 s_r = 3.2e13  # Sputtering rate (ptcls/sm²)
-density_ppcc = 1.04e3  # ptc/cm³ for a plume of m = 1 kg/s 
+density_ppcc = 4.71e3  # ptc/cm³ for a plume of m = 1 kg/s 
 H2O = 2.987e-26  # Kg per particle of H2O
 distance_conversion = 10**6  # cubic meters per 1 cm³ 
 
@@ -55,7 +57,6 @@ def calculate_max_disappearance_time(total_particles, sputtering_rate):
     return Tmax
 
 
-# PLOTTING:
 # Create a meshgrid for plotting
 mass_flux_grid, eruption_time_grid = np.meshgrid(mass_flux_rates, eruption_times)
 
@@ -73,14 +74,14 @@ for i in range(len(eruption_times)):
 # Plotting the "heatmap" = Tmax with contours 
 # I did the labels for the contours manually because clabel() was not working properly 
 plt.figure(figsize=(8,  6))
-contour = plt.contour(mass_flux_grid, eruption_time_grid, Tmax_grid, levels=[10e-7,10e-6,10e-5, 10e-4,10e-3, 10e-2, 10e-1, 10, 10e2], colors='black', linewidths=0.5)
-plt.text (2.5, 1000, '1.0e-06' , fontsize = 8, color = 'black',  ha = 'left',  va = 'center') 
-plt.text (5, 5500, '1.0e-5' ,fontsize=8, color='black', ha='left', va='center') 
-plt.text (29, 8500, '1.0e-04' ,fontsize=8, color='black', ha='left', va='center') 
-plt.text (140, 17000, '1.0e-03' ,fontsize=8, color='black', ha='left', va='center')
-plt.text (200, 130000, '1.0e-02' ,fontsize=8, color='black', ha='left', va='center')
-plt.text (1100, 220000, '1.0e-01' ,fontsize=8, color='black', ha='left', va='center')
-plt.text (2500, 1e6, '1.0e+00' ,fontsize=8, color='black', ha='left', va='center')
+contour = plt.contour(mass_flux_grid, eruption_time_grid, Tmax_grid, levels=[10e-7,10e-6,10e-5, 10e-4,10e-3, 10e-2, 10e-1, 10e0, 10e1, 10e2,], colors='black', linewidths=0.5)
+plt.text (1.5, 380, '1.0e-06 years' , fontsize = 8, color = 'black',  ha = 'left',  va = 'center') 
+plt.text (3, 2000, '1.0e-5 years' ,fontsize=8, color='black', ha='left', va='center') 
+plt.text (12, 4500, '1.0e-04 years' ,fontsize=8, color='black', ha='left', va='center') 
+plt.text (35, 17000, '1.0e-03 years' ,fontsize=8, color='black', ha='left', va='center')
+plt.text (150, 40000, '1.0e-02 years' ,fontsize=8, color='black', ha='left', va='center')
+plt.text (550, 130000, '1.0e-01 years' ,fontsize=8, color='black', ha='left', va='center')
+plt.text (2800, 2e5, '1.0e+0 years' ,fontsize=8, color='black', ha='left', va='center')
 plt.pcolormesh(mass_flux_grid, eruption_time_grid, Tmax_grid, shading='auto', norm=LogNorm(), cmap='viridis')
 plt.colorbar(label='Erosion Time (years)')
 
