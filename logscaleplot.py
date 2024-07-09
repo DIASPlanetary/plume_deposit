@@ -57,10 +57,10 @@ for i in range(len(eruption_times)):
 # I did the labels for the contours manually because clabel( ) was not working properly 
 plt.figure(figsize=(8,6))
 contour = plt.contour(mass_flux_grid, eruption_time_grid, Tmax_grid, levels= [1,10e2,10e4,10e6] ,colors='black', linewidths=0.5)
-plt.text (3.5, 1000, '1.0e+00' ,fontsize=8, color='black', ha='left', va='center') 
-plt.text (755, 4000, '1.0e+03' ,fontsize=8, color='black', ha='left', va='center') 
-plt.text (700, 450000, '1.0e+05' ,fontsize=8, color='black', ha='left', va='center') 
-plt.text (3500, 1e7, '1.0e+07' ,fontsize=8, color='black', ha='left', va='center') 
+plt.text (3.5, 1000, '1.0e+00 years' ,fontsize=8, color='black', ha='left', va='center') 
+plt.text (755, 4000, '1.0e+03 years' ,fontsize=8, color='black', ha='left', va='center') 
+plt.text (700, 450000, '1.0e+05 years' ,fontsize=8, color='black', ha='left', va='center') 
+plt.text (3500, 1e7, '1.0e+07 years' ,fontsize=8, color='black', ha='left', va='center') 
 plt.pcolormesh(mass_flux_grid, eruption_time_grid, Tmax_grid, shading='auto', norm=LogNorm(), cmap='viridis')
 plt.colorbar(label='Max Disappearance Time (years)')
 
