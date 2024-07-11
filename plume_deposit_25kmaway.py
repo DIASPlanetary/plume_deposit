@@ -78,14 +78,11 @@ for i in range(len(eruption_times)):
 # Plotting the "heatmap" = Tmax with contours 
 # I did the labels for the contours manually because clabel() was not working properly 
 plt.figure(figsize=(8,  6))
-contour = plt.contour(mass_flux_grid, eruption_time_grid, Tmax_grid, levels=[10e-7,10e-6,10e-5, 10e-4,10e-3, 10e-2, 10e-1, 10e0, 10e1, 10e2,], colors='black', linewidths=0.5)
-plt.text (1.5, 380, '1.0e-06 years' , fontsize = 8, color = 'black',  ha = 'left',  va = 'center') 
-plt.text (3, 2000, '1.0e-5 years' ,fontsize=8, color='black', ha='left', va='center') 
-plt.text (12, 4500, '1.0e-04 years' ,fontsize=8, color='black', ha='left', va='center') 
-plt.text (35, 17000, '1.0e-03 years' ,fontsize=8, color='black', ha='left', va='center')
-plt.text (150, 40000, '1.0e-02 years' ,fontsize=8, color='black', ha='left', va='center')
-plt.text (550, 130000, '1.0e-01 years' ,fontsize=8, color='black', ha='left', va='center')
-plt.text (2800, 2e5, '1.0e+0 years' ,fontsize=8, color='black', ha='left', va='center')
+contour = plt.contour(mass_flux_grid, eruption_time_grid, Tmax_grid, levels=[10e-4,10e-3, 10e-2, 10e-1, 10e0, 10e1, 10e2,10e3,10e4,10e5], colors='black', linewidths=0.5)
+plt.text (3,2000, '1.0e-02 years' , fontsize = 8, color = 'black',  ha = 'left',  va = 'center') 
+plt.text (35, 17000, '1.0e-00 years' ,fontsize=8, color='black', ha='left', va='center') 
+plt.text (550, 130000, '1.0e+02years' ,fontsize=8, color='black', ha='left', va='center') 
+plt.text (1300, 5e6, '1.0e+04 years' ,fontsize=8, color='black', ha='left', va='center')
 plt.pcolormesh(mass_flux_grid, eruption_time_grid, Tmax_grid, shading='auto', norm=LogNorm(), cmap='viridis')
 plt.colorbar(label='Erosion Time (years)')
 
