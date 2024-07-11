@@ -5,7 +5,11 @@ Created on Tue Jun 25 12:37:27 2024
 
 @author: marina
 
-This is when using the density for 25km away  radii from plume source  
+This is when using the density for 25km away  radii from plume source and searchs for the 
+erosion time of different plumes depending their mass flux at the source and their eruption time.
+In this model, the mass flux above the surface 25 km away from the source is different from the mass flux at the source point.
+This is due to the fact we take into account the particle distribution.
+The value for the density at this point was obtained from Isabelle's project (capstone_project.py)
 """
 
 import numpy as np
@@ -16,7 +20,7 @@ from matplotlib.colors import LogNorm
 A = 10**8  # Area of the plume source (m^2)
 v_avg = 460 # m/s 
 s_r = 3.2e13  # Sputtering rate (ptcls/sm²)
-density_ppcc = 4.71e3  # ptc/cm³ for a plume of m = 1 kg/s 
+density_ppcc = 3.3e10/7000    # ptc/cm³ for a plume of m = 1 kg/s 
 H2O = 2.987e-26  # Kg per particle of H2O
 distance_conversion = 10**6  # cubic meters per 1 cm³ 
 
