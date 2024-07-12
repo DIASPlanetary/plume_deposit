@@ -108,7 +108,7 @@ plt.text(0.8, 1.577e+7, '6 months', color='grey', ha='right', va='bottom')
 
 # Add the contour line for Tmax = 28 years
 c28 = plt.contour(mass_flux_grid, eruption_time_grid, Tmax_grid, levels=[28], colors='white', linewidths=1.5)
-plt.text(1500,10e6, '28 years', color='white', ha='left', va='center')
+plt.text(35 , 5e5, '28 years', color='white', ha='left', va='center')
 
 # Plotting 
 plt.xlabel('Mass Flux Rate (kg/s)')
