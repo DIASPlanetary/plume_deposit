@@ -1,14 +1,5 @@
-# Isabelle Ledwidge's Capstone Project 2023
-This project aims to analyse particle concentrations produced by plume eruptions on Europa.
-The current endgoal is to make a mapping of particle densities on Europa's surface.
+# Marina's Project 2024
+This project aims to analyse the erosion time of plume deposits on Europa.
+This specific files are presented and discussed in the report.
 This project is supervised by Hans Huybrighs.
 
-To run the code you must import:
--  neutral_europa_input.py
--  orbit_tools
--  coordinate_transformation
--  neutral_trajectories_tools
--  density
--  nim_simulation_tools
-
-I will work on this 
