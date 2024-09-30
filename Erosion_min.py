@@ -100,7 +100,7 @@ for i in range(len(eruption_times)):
 
 
 # Plotting the "heatmap" = Tmax with contours
-# labels for the contours manually because clabel() wasnt working properly
+# labels added manually
 plt.figure(figsize=(8,  6))
 contour = plt.contour(mass_flux_grid, eruption_time_grid, Tmax_grid,
                       levels=[10**i for i in range(-6, 3)],
