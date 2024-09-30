@@ -5,9 +5,11 @@ Created on Tue Jun 25 12:37:27 2024
 
 @author: marina
 
-This code shows the eruption time from less than an hour up to 12 months in log-scale
-It calculates and shows the mass flux in kg/s, the range of interest [1,10000]kg/s
-The disappearance time is shown in terms of years for convenience for the reader.
+This code shows the eruption time from less than an hour up
+to 12 months in log-scale. It calculates and shows the mass flux in kg/s,
+the range of interest [1,10000]kg/s.
+This shows how fast would the depostis for plumes of this scale
+would erode in the closest area to the point source.
 
 This is an average case for sputtering and radiolysis.
 """
@@ -41,7 +43,7 @@ seconds_per_year = 3.154e+7  # Conversion factor: seconds per year
 
 # Define the ranges for eruption time and mass flux
 eruption_times = np.logspace(np.log10(262.800288),
-                             np.log10(3.154e+7), 1000)  # Eruption times from less than 1-12 months
+                             np.log10(3.154e+7), 1000)  # Eruption times from 1-12 months
 mass_flux_rates = np.logspace(0, 4, 1000)  # Mass flux rates from 1-10,000 kg/s
 
 # CALCULATIONS:
@@ -77,7 +79,7 @@ for i in range(len(eruption_times)):
                                                            erosion_factors)
 
 # Plotting the "heatmap" = Tmax with contours
-# labels for the contours done manually
+# labels for the contours added manually
 plt.figure(figsize=(8, 6))
 contour = plt.contour(mass_flux_grid,
                       eruption_time_grid,
@@ -133,7 +135,7 @@ plt.xlabel('Mass Flux Rate (kg/s)')
 plt.ylabel('Eruption Time (seconds)', labelpad=15)
 plt.yscale('log')  # Set y-axis to logarithmic scale
 plt.xscale('log')  # Set x-axis to logarithmic scale
-plt.title('Erosion Time of Particles due to Sputtering and Radiolysis')
+plt.title('Model 1: Erosion Time of Particles due to Sputtering and Radiolysis')
 plt.show()
 
 # Example calculations for print
