@@ -16,7 +16,7 @@ capstone_project.py file.
 
 We take into account just the Radiolysis of O2 and H2 on 
 an average case asumming all of the particles escape Europa's 
-surface (they don't bounce back) 
+surface.
 """
 
 import numpy as np
