@@ -11,12 +11,12 @@ mass flux at the source and their eruption time. In this model, the mass
 flux above the surface 25 km away from the source is different from the
 mass flux at the source point.
 This is due to the fact we take into account the particle distribution.
-The value for the density at this point was obtained from Isabelle's project
-(capstone_project.py)
+The value for the density at this point was obtained from
+capstone_project.py file.
 
 In this model we take into account the 3 main erosion facotrs in Eruopa in
-an extreme case:
--S_R=  TrLeading Hemisphere
+a minimum case:
+-S_R=  Leading Hemisphere
 -Radiolysis= Anti-subsolar point
 """
 
