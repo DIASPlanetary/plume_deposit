@@ -28,16 +28,14 @@ This project was carried out in collaboration between *Marina Casado-Anarte* and
 ## Dependencies
 
 To run the simulations, you will need the following libraries:
-
-```bash
-pip install numpy
-# Additional dependencies:
-neutral_europa_input.py
-orbit_tools
-coordinate_transformation
-neutral_trajectories_tools
-density
-nim_simulation_tools
+numpy.py
+In order to run `density_distribution.py` you will also need: 
+`neutral_europa_input.py`
+`orbit_tools.py`
+`coordinate_transformation.py`
+`neutral_trajectories_tools.py`
+`density.py`
+`nim_simulation_tools.py
 
 ---
 
