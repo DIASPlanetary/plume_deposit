@@ -15,3 +15,5 @@ To run the code you must import:
 -  neutral_trajectories_tools
 -  density
 -  nim_simulation_tools
+
+I will work on this 
