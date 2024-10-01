@@ -11,11 +11,13 @@ mass flux at the source and their eruption time. In this model, the mass
 flux above the surface 25 km away from the source is different from the
 mass flux at the source point.
 This is due to the fact we take into account the particle distribution.
-The value for the density at this point was obtained from Isabelle's project
-(capstone_project.py)
+The value for the density at this point was obtained from
+density_distribution.py file.
 
-We take into account just the sputtering rate asumming just 2% of the ptcls
-escape Europa and never return after getting sputtered.
+We take into account just the Sputtering rate asumming just
+2% of the particles escape Europa and never return after getting sputtered.
+This sputtering rate is the sum of all sputtering components
+for different impining ions from Plainaki et al 2012 Fig 1.
 """
 
 import numpy as np
@@ -94,10 +96,10 @@ for i in range(len(eruption_times)):
 
 
 # Plotting the "heatmap" = Tmax with contours
-# labels for the contours manually because clabel() wasnt working properly
+# labels added manually
 plt.figure(figsize=(8,  6))
 contour = plt.contour(mass_flux_grid, eruption_time_grid, Tmax_grid,
-                      levels=[10**i for i in range(-4, 6)],
+                      levels=[10**i for i in range(-4, 7)],
                       colors='black', linewidths=0.5)
 plt.text(1.5, 7e2, '1.0e-02years', fontsize=8,
          color='black',  ha='left',  va='center')
