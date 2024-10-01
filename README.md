@@ -34,8 +34,9 @@ In order to run `density_distribution.py` you will also need:
 `orbit_tools.py`
 `coordinate_transformation.py`
 `neutral_trajectories_tools.py`
+`nim_simulation.py
 `density.py`
-`nim_simulation_tools.py
+
 
 ---
 
