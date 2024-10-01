@@ -28,7 +28,7 @@ This project was carried out in collaboration between *Marina Casado-Anarte* and
 ## Dependencies
 
 To run the simulations, you will need the following libraries:
-numpy.py
+`numpy.py`
 In order to run `density_distribution.py` you will also need: 
 `neutral_europa_input.py`
 `orbit_tools.py`
