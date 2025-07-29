@@ -11,11 +11,8 @@ This is due to the fact we take into account the particle distribution.
 The value for the density at this point was obtained from
 density_distribution.py file.
 
-We take into account just the sputtering rateat the Leading Hemisphere
-asumming all of the particles escape Europa and never return
-after getting sputtered.
-This sputtering rate is the sum of all sputtering components
-for different impining ions from Plainaki et al 2012 Fig 1.
+Sputtering from the impact of S ions, H ions 
+and O ions at the Leading hemisphere
 """
 
 import numpy as np
@@ -146,7 +143,7 @@ plt.xlabel('Mass Flux Rate (kg/s)')
 plt.ylabel('Eruption Time (seconds)', labelpad=15)
 plt.yscale('log')  # Set y-axis to logarithmic scale
 plt.xscale('log')  # Set x-axis to logarithmic scale
-plt.title('Erosion Time of Particle due to Sputtering at the Leading hemisphere ')
+plt.title('Sputtering LH: Erosion Time of Deposit 25 km Away from Plume Source')
 plt.show()
 
 # Example calculations for print
