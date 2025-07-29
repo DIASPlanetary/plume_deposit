@@ -105,15 +105,13 @@ plt.figure(figsize=(8,  6))
 contour = plt.contour(mass_flux_grid, eruption_time_grid, Tmax_grid,
                       levels=[10**i for i in range(-5, 5)],
                       colors='black', linewidths=0.5)
-"""
-plt.text(13, 2000, '1.0e-02 years', fontsize=8,
+
+plt.text(22, 2000, '1.0e-04 years', fontsize=8,
          color='black',  ha='left',  va='center')
-plt.text(50, 35000, '1.0e+00 years',  fontsize=8,
+plt.text(98, 35000, '1.0e-02 years',  fontsize=8,
          color='black',  ha='left',  va='center')
-plt.text(220, 1e6, '1.0e+02years', fontsize=8,
+plt.text(400, 1e6, '1.0e+00years', fontsize=8,
          color='black',  ha='left',  va='center')
-plt.text(2e3, 1e7, '1.0e+04years', fontsize=8,
-         color='black',  ha='left',  va='center')"""
 plt.pcolormesh(mass_flux_grid, eruption_time_grid,
                Tmax_grid, shading='auto', norm=LogNorm(), cmap='viridis')
 plt.colorbar(label='Erosion Time (years)')
@@ -145,14 +143,14 @@ plt.text(0.8, 1.577e+7, '6 months', color='grey', ha='right', va='bottom')
 # Add the contour line for Tmax = 28 years
 c28 = plt.contour(mass_flux_grid, eruption_time_grid,
                   Tmax_grid, levels=[28], colors='white', linewidths=1.5)
-plt.text(230, 4e5, '28 years', color='white', ha='left', va='center')
+plt.text(1700, 7e6, '28 years', color='white', ha='left', va='center')
 
 # Plotting
 plt.xlabel('Mass Flux Rate (kg/s)')
 plt.ylabel('Eruption Time (seconds)', labelpad=15)
 plt.yscale('log')  # Set y-axis to logarithmic scale
 plt.xscale('log')  # Set x-axis to logarithmic scale
-plt.title('Erosion Time of Particles due to Radiolysis at ASP 25 km Away from Plume Source ')
+plt.title('Radiolysis ASP: Erosion Time of Deposit 25 km Away from Plume Source ')
 plt.show()
 
 # Example calculations for print
