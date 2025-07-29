@@ -14,10 +14,10 @@ This is due to the fact we take into account the particle distribution.
 The value for the density at this point was obtained from
 density_distribution.py file.
 
-In this model we take into account the 3 main erosion facotrs in Eruopa in
+In this model we take into account the 2 main erosion facotrs in Eruopa in
 a minimum case:
--S_R=  Leading Hemisphere
--Radiolysis= Anti-subsolar point
+-Ion Sputtering at the Leading Hemisphere
+-Radiolysis at the Anti-subsolar point
 """
 
 import numpy as np
@@ -150,7 +150,7 @@ plt.xlabel('Mass Flux Rate (kg/s)')
 plt.ylabel('Eruption Time (seconds)', labelpad=15)
 plt.yscale('log')  # Set y-axis to logarithmic scale
 plt.xscale('log')  # Set x-axis to logarithmic scale
-plt.title('Total Erosion Time of Particles  at the Anti-solar point at the Leading Hemisphere')
+plt.title('Minimum Case: Erosion Time of Deposit 25 km Away from Plume Source')
 plt.show()
 
 # Example calculations for print
