@@ -14,10 +14,10 @@ This is due to the fact we take into account the particle distribution.
 The value for the density at this point was obtained from
 density_distribution.py file.
 
-In this model we take into account the 3 main erosion facotrs in Eruopa in
-an extreme case:
--S_R=  Trailing Hemisphere
--Radiolysis= Subsolar point
+In this model we take into account the 2 main erosion facotrs in Eruopa in
+an maximum case:
+-Ion Sputtering  at the Trailing Hemisphere
+-Radiolysis at the Subsolar point
 """
 
 import numpy as np
@@ -107,11 +107,11 @@ plt.figure(figsize=(8,  6))
 contour = plt.contour(mass_flux_grid, eruption_time_grid, Tmax_grid,
                       levels=[10**i for i in range(-7, 3)],
                       colors='black', linewidths=0.5)
-plt.text(13, 2000, '1.0e-04 years', fontsize=8,
+plt.text(40, 2000, '1.0e-04 years', fontsize=8,
          color='black',  ha='left',  va='center')
-plt.text(150, 3e4, '1.0e-02 years', fontsize=8,
+plt.text(150, 5e4, '1.0e-02 years', fontsize=8,
          color='black', ha='left', va='center')
-plt.text(890, 260000, '1.0e+00 years', fontsize=8,
+plt.text(890, 9e5, '1.0e+00 years', fontsize=8,
          color='black', ha='left', va='center')
 plt.pcolormesh(mass_flux_grid, eruption_time_grid, Tmax_grid,
                shading='auto', norm=LogNorm(), cmap='viridis')
@@ -145,14 +145,14 @@ plt.text(0.8, 1.577e+7, '6 months', color='grey', ha='right', va='bottom')
 # Add the contour line for Tmax = 28 years
 c28 = plt.contour(mass_flux_grid, eruption_time_grid,
                   Tmax_grid, levels=[28], colors='white', linewidths=1.5)
-plt.text(2000, 1.4e7, '28 years', color='white', ha='left', va='center')
+plt.text(2000, 1.2e7, '28 years', color='white', ha='left', va='center')
 
 # Plotting
 plt.xlabel('Mass Flux Rate (kg/s)')
 plt.ylabel('Eruption Time (seconds)', labelpad=15)
 plt.yscale('log')  # Set y-axis to logarithmic scale
 plt.xscale('log')  # Set x-axis to logarithmic scale
-plt.title('Total Erosion Time of Particles at the Subsolar Point of the Trailing Hemisphere ')
+plt.title('Maximum Case: Erosion Time of Deposit 25 km Away from Plume Source')
 plt.show()
 
 # Example calculations for print
