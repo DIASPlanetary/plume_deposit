@@ -11,7 +11,8 @@ the range of interest [1,10000]kg/s.
 This shows how fast would the depostis for plumes of this scale
 would erode in the closest area to the point source.
 
-This is an average case for sputtering and radiolysis.
+Here we use the average values for Ion Sputtering
+and Radiolysis from (Plainaki et al. 2012).
 """
 
 import numpy as np
@@ -135,7 +136,7 @@ plt.xlabel('Mass Flux Rate (kg/s)')
 plt.ylabel('Eruption Time (seconds)', labelpad=15)
 plt.yscale('log')  # Set y-axis to logarithmic scale
 plt.xscale('log')  # Set x-axis to logarithmic scale
-plt.title('Model 1: Erosion Time of Particles due to Sputtering and Radiolysis')
+plt.title('Model 1: Erosion Time of Deposit due to Sputtering and Radiolysis')
 plt.show()
 
 # Example calculations for print
