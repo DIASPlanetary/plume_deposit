@@ -13,7 +13,8 @@ mass flux at the source point.
 This is due to the fact we take into account the particle distribution.
 The value for the density at this point was obtained from density_distribution.py
 
-In this model we take into account the 3 main erosion facotrs in Eruopa 
+In this model we take into account the 2 main erosion facotrs in Eruopa:
+ion sputtering and radiolysis
 and study how long will the particles remain in the surface at this location.
 """
 
@@ -151,7 +152,7 @@ plt.xlabel('Mass Flux Rate (kg/s)')
 plt.ylabel('Eruption Time (seconds)', labelpad=15)
 plt.yscale('log')  # Set y-axis to logarithmic scale
 plt.xscale('log')  # Set x-axis to logarithmic scale
-plt.title('Erosion Time of Particles 25 km Away from Plume Source ')
+plt.title('Erosion Time of Deposit 25 km Away from Plume Source ')
 plt.show()
 
 # Example calculations for print
