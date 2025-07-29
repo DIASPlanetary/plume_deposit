@@ -14,11 +14,8 @@ This is due to the fact we take into account the particle distribution.
 The value for the density at this point was obtained from
 density_distribution.py file.
 
-We take into account just the Sputtering rate  at the Trailing Hemisphere 
-asumming all of the particles  escape Europa and never return 
-after getting sputtered.
-This sputtering rate is the sum of all sputtering components
-for different impining ions from Plainaki et al 2012 fig 1
+Sputtering from the impact of S ions, H ions 
+and O ions at the Trailing hemisphere.
 """
 
 import numpy as np
@@ -102,7 +99,7 @@ plt.figure(figsize=(8,  6))
 contour = plt.contour(mass_flux_grid, eruption_time_grid, Tmax_grid,
                       levels=[10**i for i in range(-5, 4)],
                       colors='black', linewidths=0.5)
-plt.text(14.9, 7e2, '1.0e-03 years', fontsize=8,
+plt.text(6, 7e2, '1.0e-04 years', fontsize=8,
          color='black',  ha='left',  va='center')
 plt.text(170, 2000, '1.0e-02 years', fontsize=8,
          color='black',  ha='left',  va='center')
@@ -141,14 +138,14 @@ plt.text(0.8, 1.577e+7, '6 months', color='grey', ha='right', va='bottom')
 # Add the contour line for Tmax = 28 years
 c28 = plt.contour(mass_flux_grid, eruption_time_grid,
                   Tmax_grid, levels=[28], colors='white', linewidths=1.5)
-plt.text(950, 1e6, '28 years', color='white', ha='left', va='center')
+plt.text(1050, 1e6, '28 years', color='white', ha='left', va='center')
 
 # Plotting
 plt.xlabel('Mass Flux Rate (kg/s)')
 plt.ylabel('Eruption Time (seconds)', labelpad=15)
 plt.yscale('log')  # Set y-axis to logarithmic scale
 plt.xscale('log')  # Set x-axis to logarithmic scale
-plt.title('Erosion Time of Particle due to Sputtering at the Trailing hemisphere ')
+plt.title('Sputtering TH: Erosion Time of Deposit 25 km Away from Plume Source')
 plt.show()
 
 # Example calculations for print
