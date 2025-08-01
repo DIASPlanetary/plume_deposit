@@ -157,5 +157,4 @@ print(f"Density for given mass flux:  {rho_step_example:.2E} kg/m³")
 print(f"Mass flux falling to surface : {massflux_f_example:.2E} kg/s")
 print(f"Total particles erupted: {total_particles:.2E} kg")
 print(f"Max disappearance time: {max_disappearance_time:.2E} years")
-print(f"Total particles erupted: {total_particles:.2E} kg")
-print(f"Max disappearance time: {max_disappearance_time:.2E} years")
+
