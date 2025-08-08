@@ -38,9 +38,7 @@ We implement two simplified models:
 This project was carried out in collaboration between: 
 
 - Marina Casado-Anarte
-- 
 - Dr. H. L. F. Huybrighs
-- 
 - I. Ledwidg 
 
 ---
