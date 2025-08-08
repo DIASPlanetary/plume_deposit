@@ -27,11 +27,11 @@ If you wish to change plume density characteristics, this is the file to modify.
 We implement two simplified models:
 
 - **Model 1** :
-      - Confined 10×10 km deposit near the plume source  
-      - Assumes uniform deposition (closed system) in a small area.
+  - Confined 10×10 km deposit near the plume source
+  -  Assumes uniform deposition (closed system) in a small area.
 
 - **Model 2**:
-      - Deposits at 25 km from the source to account for observational limitations.
+  - Deposits at 25 km from the source to account for observational limitations.
   - Uses a realistic spatial density profile based on ballistic plume models. 
 
 ---
