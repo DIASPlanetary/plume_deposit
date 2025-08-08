@@ -1,7 +1,9 @@
 # Water Plume Deposit Erosion Models 
 
 *How long does a deposit from a plume stay on the surface?*
+
 This repository is dedicated to the study of the transient nature of plume deposits on Europa's surface, which is crucial for future missions like JUICE and Europa Clipper. The study investigates the hypothesis that these deposits are not permanent, as they are subjected to various erosion factors.
+
 In this work, we focus on two primary processes: **sputtering** and **radiolysis**, as they are among the most effective erosion mechanisms on Europa.  
 To account for variability in erosion factors across Europa’s surface, we simulate each model under three representative location cases:
 
