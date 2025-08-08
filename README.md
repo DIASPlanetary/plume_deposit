@@ -1,4 +1,5 @@
-# Water Plume Deposit Erosion Models 
+# Water Plume Deposit Erosion Models [![DOI](https://zenodo.org/badge/813523259.svg)](https://doi.org/10.5281/zenodo.16780640)
+
 
 *How long does a deposit from a plume stay on the surface?*
 
