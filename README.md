@@ -14,13 +14,6 @@ To account for variability in erosion factors across Europa’s surface, we simu
 | **Minimum**  | Least erosive: best for deposit preservation                                            |
 
 
-
-The `density_distribution.py` file is used to compute the **plume's spatial density distribution**.  
-This file **requires external input files** and is mainly provided for **contextualisation** (showing where the density value used in Model 2 comes from).
-
-If you wish to change plume density characteristics, this is the file to modify. However, it depends on custom modules described in _Dependencies_ section  **not included here**. For access, please contact **Dr. H. L. F. Huybrighs**.
-
-
 ---
 ##  Models Overview
 
@@ -41,7 +34,7 @@ This project was carried out in collaboration between:
 
 - Marina Casado-Anarte
 - Dr. H. L. F. Huybrighs
-- I. Ledwidg 
+- I. Ledwidge
 
 ---
 
@@ -53,7 +46,11 @@ To run the simulations, you will need the following libraries:
 
 - `matplot.lib`
 
-In order to run `density_distribution.py` you will also need: 
+
+The `density_distribution.py` file is used to compute the **plume's spatial density distribution**.  
+This file **requires external input files** and is mainly provided for **contextualisation** (showing where the density value used in Model 2 comes from).
+
+If you wish to change plume density characteristics, this is the file to modify. However, it depends on custom modules **not included here**: 
 
 - `neutral_europa_input.py`
 
@@ -69,7 +66,7 @@ In order to run `density_distribution.py` you will also need:
 
 - `densityStorage.npy`
 
-
+ For access, please contact **Dr. H. L. F. Huybrighs**.
 
 
 
