@@ -1,7 +1,7 @@
 """
 @author: marina
 
-This is a python script for Figure 6 in Marina et al. 2025.
+This is a python script for Figure 6 in Casado-Anarte et al. 2025.
 
 Calculates the rosion time of plume’s deposit as a function of mass flux and time of eruption
 25 km away from the source for an average case.
