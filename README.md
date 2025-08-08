@@ -46,7 +46,7 @@ To run the simulations, you will need the following libraries:
 
 - `matplot.lib`
 
-The `density_distribution.py` file is used to compute the plume's spatial density distribution used in model 2, but is not required to run the scripts for the key figures in the paper. These scripts use the density value obtained with `density_distribution.py` for a 1 kg/s plume at 25 km, which is 4.71e+06 Particles per cm³ . If you wish to extract plume density values at different locations then `density_distribution.py` should be modified accordingly.  `density_distribution.py` requires external input files not included here, they are listed below.  For access to these dependencies, please contact ** Dr. H. L. F. Huybrighs**.
+The `density_distribution.py` file is used to compute the plume's spatial density distribution used in model 2, but is not required to run the scripts for the key figures in the paper. These scripts use the density value obtained with `density_distribution.py` for a 1 kg/s plume at 25 km, which is 4.71e+06 Particles per cm³ . If you wish to extract plume density values at different locations then `density_distribution.py` should be modified accordingly.  `density_distribution.py` requires external input files not included here, they are listed below.  For access to these dependencies, please contact **Dr. H. L. F. Huybrighs**.
 
 - `neutral_europa_input.py`
 
