@@ -24,32 +24,49 @@ If you wish to change plume density characteristics, this is the file to modify.
 
 We implement two simplified models:
 
-- **Model 1** — Confined 10×10 km deposit near the plume source  
-  Assumes uniform deposition (closed system) in a small area.
+- **Model 1** :
+      - Confined 10×10 km deposit near the plume source  
+      - Assumes uniform deposition (closed system) in a small area.
 
-- **Model 2** — Deposits at 25 km from the source to account for observational limitations.
-  Uses a realistic spatial density profile based on ballistic plume models. 
+- **Model 2**:
+      - Deposits at 25 km from the source to account for observational limitations.
+      - Uses a realistic spatial density profile based on ballistic plume models. 
 
 ---
 ## Collaboration
 
 This project was carried out in collaboration between: 
-*Marina Casado-Anarte*, *Dr. H. L. F. Huybrighs* and *I. Ledwidg* . 
+
+- Marina Casado-Anarte
+- 
+- Dr. H. L. F. Huybrighs
+- 
+- I. Ledwidg 
 
 ---
 
 ## Dependencies
 
 To run the simulations, you will need the following libraries:
+
 · `numpy.py`
+
 ·`matplot.lib
+
 In order to run `density_distribution.py` you will also need: 
+
 ·`neutral_europa_input.py`
+
 ·`orbit_tools.py`
+
 ·`coordinate_transformation.py`
+
 ·`neutral_trajectories_tools.py`
+
 ·`nim_simulation.py`
+
 ·`density.py`
+
 ·`densityStorage.npy
 
 
