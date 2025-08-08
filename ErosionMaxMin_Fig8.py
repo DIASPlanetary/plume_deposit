@@ -1,7 +1,7 @@
 """
 @author: marina
 
-This is a python script for Figure 8 in Marina et al. 2025.
+This is a python script for Figure 8 in Casado-Anarte et al. 2025.
 
 It shows the combined effect of radiolysis and ion sputtering on the erosion of a plume
 deposit located 25 km from the source in its most extremem and mininal effect.
