@@ -49,25 +49,25 @@ This project was carried out in collaboration between:
 
 To run the simulations, you will need the following libraries:
 
-· `numpy.py`
+- `numpy.py`
 
-· `matplot.lib
+- `matplot.lib`
 
 In order to run `density_distribution.py` you will also need: 
 
-·`neutral_europa_input.py`
+- `neutral_europa_input.py`
 
-·`orbit_tools.py`
+- `orbit_tools.py`
 
-·`coordinate_transformation.py`
+- `coordinate_transformation.py`
 
-·`neutral_trajectories_tools.py`
+- `neutral_trajectories_tools.py`
 
-·`nim_simulation.py`
+- `nim_simulation.py`
 
-·`density.py`
+- `density.py`
 
-·`densityStorage.npy
+- `densityStorage.npy`
 
 
 
