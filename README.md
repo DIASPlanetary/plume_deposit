@@ -32,8 +32,7 @@ We implement two simplified models:
 
 - **Model 2**:
       - Deposits at 25 km from the source to account for observational limitations.
-  
-      - Uses a realistic spatial density profile based on ballistic plume models. 
+  - Uses a realistic spatial density profile based on ballistic plume models. 
 
 ---
 ## Collaboration
