@@ -1,7 +1,7 @@
 """
 @author: marina
 
-This is a python script for Figure 5 in Marina et al. 2025.
+This is a python script for Figure 5 in Casado-Anarte et al. 2025.
 
 Calculates the eosion time of the plume’s deposit as a function of mass flux and time of
 eruption for Model 1.
