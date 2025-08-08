@@ -49,7 +49,7 @@ To run the simulations, you will need the following libraries:
 
 · `numpy.py`
 
-·`matplot.lib
+· `matplot.lib
 
 In order to run `density_distribution.py` you will also need: 
 
